@@ -4,10 +4,25 @@ import { AppService } from './app.service';
 import { ProductModule } from './product/product.module';
 import { MongooseModule } from '@nestjs/mongoose';
 
+import { TypegooseModule } from 'nestjs-typegoose'
+import configuration from './config/config';
+import { ConfigModule, ConfigService } from '@nestjs/config'
+
 @Module({
   imports: [
     ProductModule, 
-    MongooseModule.forRoot('mongodb+srv://db_user_platzivideos:rompiendola.desde.l9l9@cluster0-f0pdk.mongodb.net/test?retryWrites=true&w=majority')
+    ConfigModule.forRoot({
+      load: [configuration],
+    }),
+    TypegooseModule.forRootAsync({
+      imports:[ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get('mongoURI'),
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+      }),
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
