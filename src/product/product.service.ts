@@ -27,7 +27,7 @@ export class ProductService {
   }
 
   async deletedProduct(productID: string): Promise<Product> {
-    const deletedProduct = await this.productModel.findOneAndDelete({ _id: productID})
+    const deletedProduct = await this.productModel.findByIdAndDelete({ _id: productID})
     return deletedProduct
   }
   
