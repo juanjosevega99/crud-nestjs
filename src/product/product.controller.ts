@@ -21,9 +21,7 @@ export class ProductController {
   @Get('/')
   async getProducts(@Res() res) {
     const products = await this.productService.getProducts()
-    return res.status(HttpStatus.OK).json({
-      products
-    })
+    return res.status(HttpStatus.OK).json(products)
   }
 
   @Get('/:productID')
