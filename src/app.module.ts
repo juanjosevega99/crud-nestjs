@@ -1,28 +1,17 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { MongooseModule } from "@nestjs/mongoose";
 import { ProductModule } from './product/product.module';
-
-import { TypegooseModule } from 'nestjs-typegoose'
-import configuration from './config/config';
-import { ConfigModule, ConfigService } from '@nestjs/config'
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      load: [configuration],
+    MongooseModule.forRoot('mongodb://localhost/products-nest', {
+      useNewUrlParser: true,
+      useFindAndModify: false,
+      useCreateIndex: true
     }),
-    TypegooseModule.forRootAsync({
-      imports:[ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get('databaseMongodb'),
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true,
-      }),
-      inject: [ConfigService],
-    }),
-    ProductModule, 
+    ProductModule
   ],
   controllers: [AppController],
   providers: [AppService],
