@@ -1,3 +1,3 @@
 export default (): any => ({
-  mongoURI: process.env.MONGOURI || '',
+  databaseMongodb: process.env.MONGOBD || '',
 });
