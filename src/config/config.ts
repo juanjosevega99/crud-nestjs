@@ -1,3 +1,3 @@
-export default (): any => ({
-  databaseMongodb: process.env.MONGOBD || '',
+export default () => ({
+  databaseMongodb: process.env.MONGODB_URI || '',
 });
