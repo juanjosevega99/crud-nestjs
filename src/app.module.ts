@@ -4,12 +4,23 @@ import { AppService } from './app.service';
 import { MongooseModule } from "@nestjs/mongoose";
 import { ProductModule } from './product/product.module';
 
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import configuration from './config/config';
+
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/products-nest', {
-      useNewUrlParser: true,
-      useFindAndModify: false,
-      useCreateIndex: true
+    ConfigModule.forRoot({
+      load: [configuration],
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+        useNewUrlParser: true,
+        useFindAndModify: false,
+        useCreateIndex: true
+      }),
+      inject: [ConfigService]
     }),
     ProductModule
   ],
